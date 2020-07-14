@@ -4,13 +4,55 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="InfiniteListView.MainPage">
+             x:Class="InfiniteListView.MainPage"
+             xmlns:custom="clr-namespace:InfiniteListView.Custom"
+             xmlns:viewModels="clr-namespace:InfiniteListView.ViewModels">
+    
+    <ContentPage.BindingContext>
+        <viewModels:ProductViewModel/>
+    </ContentPage.BindingContext>
 
     <StackLayout>
-        <!-- Place new controls here -->
-        <Label Text="Welcome to Xamarin.Forms!" 
-           HorizontalOptions="Center"
-           VerticalOptions="CenterAndExpand" />
+        <custom:ListViewInfiniteScroll 
+            ItemsSource="{Binding Products}"
+            CanLoadMore="{Binding CanLoadMore}"                        
+            LoadMoreCommand="{Binding LoadMoreCommand}"
+            HasUnevenRows="True">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid HorizontalOptions="Center">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                FontSize="Large"                                
+                                Text="Name"
+                                HorizontalOptions="End"/>
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                FontSize="Large"                                
+                                HorizontalOptions="Start"                                
+                                Text="{Binding Name}"/>
+                        </Grid>                        
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </custom:ListViewInfiniteScroll>
+        <ActivityIndicator
+            IsRunning="{Binding IsBusy}"
+            Color="Black"
+            IsVisible="{Binding IsBusy}"
+            HorizontalOptions="Center"
+            VerticalOptions="End"/>
     </StackLayout>
 
 </ContentPage>
